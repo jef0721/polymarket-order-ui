@@ -1,0 +1,2 @@
+polymarket-client==0.10.0
+python-dotenv==1.2.3

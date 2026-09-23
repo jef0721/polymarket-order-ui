@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.account-*
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+venv/
+*.zip

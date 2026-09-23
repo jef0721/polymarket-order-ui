@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f6f8"><meta name="csrf-token" content="__CSRF__"><title>Polymarket · 下单台</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head>
+<body>
+<a class="skip" href="#main">跳到下单表单</a>
+<header><a class="brand" href="/" aria-label="下单台首页"><span class="logo" aria-hidden="true">P</span><span translate="no">Polymarket <small>下单台</small></span></a><div class="header-actions"><button type="button" id="settings-button" class="settings-button">新建用户</button><span class="local"><i aria-hidden="true"></i>本机运行</span></div></header>
+<main id="main">
+<div class="intro"><p class="eyebrow">简单操作 · 清楚确认</p><h1>你的下一笔订单。</h1><p>选择市场与结果，预览后再提交。</p></div>
+<section class="account-panel" aria-labelledby="account-heading"><div class="account-panel-top"><div><h2 id="account-heading">用户配置状态</h2><p id="account-wallet-display">正在读取…</p></div><div class="account-actions"><button id="check-account" class="secondary" type="button" disabled>检查能否交易</button><button id="clear-account" class="secondary danger" type="button" disabled>清除当前配置</button></div></div><dl class="account-checks"><div><dt>配置</dt><dd id="config-state">读取中</dd></div><div><dt>API 下单地区</dt><dd id="region-state">未检查</dd></div><div><dt>账户认证</dt><dd id="auth-state">未检查</dd></div><div><dt>买入余额／授权</dt><dd id="buying-state">未检查</dd></div><div><dt>交易状态</dt><dd id="trading-state">尚不能确认</dd></div></dl><p class="hint account-note">网页端与 API 的地区规则可能不同。检查不会下单；具体订单仍可能因余额、持仓、市场状态或平台限制被拒绝。</p><p id="account-error" class="error" role="alert" hidden></p></section><div class="layout">
+<section class="card"><div class="cardtop"><h2>限价下单</h2><span class="pill">真实交易</span></div>
+<form id="order-form">
+<fieldset><legend>交易方向</legend><div class="choices"><label class="choice side-buy"><input type="radio" name="side" value="BUY" checked><span>买入 <small>建立持仓</small></span></label><label class="choice side-sell"><input type="radio" name="side" value="SELL"><span>卖出 <small>出售已有份额</small></span></label></div></fieldset>
+<label for="market">赛事或市场链接</label><div class="market-lookup"><input id="market" name="market" autocomplete="off" spellcheck="false" required maxlength="500" placeholder="粘贴 Polymarket 链接" aria-describedby="market-help"><button id="load-market" class="secondary" type="button">读取市场</button></div><p class="hint" id="market-help">可粘贴赛事链接或具体子市场链接；链接末尾的 # 内容会自动忽略。</p>
+<div id="market-details" hidden><label for="market-choice">具体子市场</label><select id="market-choice" name="market_slug" aria-describedby="market-question"></select><p class="hint" id="market-question"></p><fieldset><legend>选择结果</legend><div class="choices"><label class="choice yes"><input type="radio" name="selection" value="0" checked><span id="outcome-0"></span></label><label class="choice no"><input type="radio" name="selection" value="1"><span id="outcome-1"></span></label></div></fieldset></div>
+<div class="inputs"><div><label for="price"><span id="price-label">最高买入价</span> <span>美元 / 份</span></label><input type="number" inputmode="decimal" name="price" id="price" min="0.0001" max="0.9999" step="any" autocomplete="off" required placeholder="0.40…"></div><div><label for="size"><span id="size-label">买入份数</span></label><input type="number" inputmode="decimal" name="size" id="size" min="0.01" max="1000000" step="0.01" autocomplete="off" required placeholder="10…"></div></div>
+<div class="estimate"><span id="estimate-label">预计支出上限</span><strong id="estimate">—</strong></div><p class="hint" id="estimate-help">不含适用费用。实际买入价格不会高于你的限价。</p>
+<p id="form-error" class="error" role="alert" tabindex="-1" hidden></p>
+<button class="primary" id="preview-button" type="submit">预览订单 <span aria-hidden="true">→</span></button>
+<p class="footnote">预览不会下单。未成交的挂单会持续保留，直到成交或撤单。</p>
+</form></section>
+<aside class="card review" aria-labelledby="review-heading"><div class="cardtop"><h2 id="review-heading">订单预览</h2><span class="step">02</span></div>
+<div id="empty"><div class="empty-icon" aria-hidden="true">≡</div><h3>先看清楚，再下单</h3><p>填写左侧表单并点击预览，<br>这里会展示市场与订单明细。</p></div>
+<div id="preview" hidden><p class="eyebrow">确认你选择的市场</p><h3 id="question"></h3><dl><div><dt>下单账户</dt><dd id="preview-wallet"></dd></div><div><dt>结果 / 方向</dt><dd id="result-side"></dd></div><div><dt>限价 / 份数</dt><dd id="result-order"></dd></div><div><dt>当前最高买价 / 最低卖价</dt><dd id="quotes"></dd></div><div><dt>最小份数 / 价格步长</dt><dd id="constraints"></dd></div><div class="total"><dt id="total-label">支出上限 · 不含费用</dt><dd id="total"></dd></div></dl><p class="hint" id="preview-help">预览有效期 2 分钟。行情会变化；GTC 订单可能立即或部分成交。</p><button id="open-confirm" class="primary" type="button">确认并下单</button></div>
+<div id="status" role="status" aria-live="polite" tabindex="-1"></div>
+</aside></div>
+<footer><span>私钥保存在本机，不会显示在页面。</span><a href="https://polymarket.com" target="_blank" rel="noopener noreferrer">查看挂单与持仓 ↗</a></footer>
+</main>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><h2 id="confirm-title">提交这笔真实订单？</h2><p id="confirm-summary"></p><p class="hint">确认后将使用你配置的账户发送订单。已成交部分不能通过撤单退回。</p><div class="dialog-actions"><button id="back" class="secondary" type="button">返回检查</button><button id="send" class="primary" type="button">提交真实订单</button></div></dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title">
+<h2 id="settings-title">新建用户配置</h2>
+<p class="hint">填写新的签名私钥和 Polymarket 账户地址。保存后会替换此电脑的现有配置；私钥仅保存在本机，不会回显。</p>
+<form id="settings-form">
+<label for="account-wallet">Polymarket 账户钱包地址</label>
+<input id="account-wallet" name="wallet" type="text" autocomplete="off" spellcheck="false" required pattern="0x[0-9a-fA-F]{40}" placeholder="0x…" aria-describedby="wallet-help">
+<p class="hint" id="wallet-help">复制 Polymarket 个人菜单中的账户地址，可能与签名钱包地址不同。</p>
+<label for="account-key">该账户的签名私钥</label>
+<input id="account-key" name="private_key" type="password" autocomplete="new-password" spellcheck="false" required pattern="0x[0-9a-fA-F]{64}" placeholder="输入完整私钥…" aria-describedby="key-help">
+<p class="hint" id="key-help">每次更换请同时填写地址和对应私钥。保存后会进行只读账户检查，不会下单。</p>
+<p class="error" id="settings-error" role="alert" tabindex="-1" hidden></p>
+<div class="dialog-actions"><button type="button" id="settings-cancel" class="secondary">取消</button><button type="submit" id="settings-save" class="primary">保存新用户</button></div>
+</form></dialog>
+<dialog id="clear-dialog" aria-labelledby="clear-title"><h2 id="clear-title">清除当前用户配置？</h2><p>这会从本机配置文件中移除签名私钥和钱包地址，并使现有订单预览失效；不会影响链上资产或平台账户。</p><div class="dialog-actions"><button id="clear-cancel" class="secondary" type="button">取消</button><button id="clear-confirm" class="primary danger-button" type="button">清除本机配置</button></div></dialog>
+</body></html>
